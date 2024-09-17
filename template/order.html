@@ -1,0 +1,358 @@
+{% extends 'wrapper.html' %}
+{% block content %}
+<meta name="csrf-token" content="{{ csrf_token }}">
+
+<div class="container">
+    <div class="row">
+        <div class="col " ><!-- Button trigger modal -->
+            <div class="row">
+                <div class="col">
+                    <nav class="navbar bg-body-tertiary">
+                       <h5>Savdo</h5>
+                    </nav><!-- Button trigger modal -->
+                </div>
+            </div>
+            <div class="modal fade" id="sellModal" tabindex="-1" aria-labelledby="sellModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="sellModalLabel">Clientni tanlang</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                          <!-- Ma'lumotlar formi -->
+                          <form id="sellForm">
+                              <!-- Clientni tanlash -->
+                              <div class="mb-3">
+                                  <label for="client" class="form-label">Client</label>
+                                  <select class="form-control" id="client">
+                                    <option value="0">None</option>
+                                    {% for i in client %}
+                                      <option value="{{i.id}}">{{i.name}}</option>
+                                    {% endfor %}
+                                  </select>
+                              </div> 
+                              
+                              <div class="mb-3">
+                                
+                              </div>   
+                              <div class="mb-3 form-check form-switch">
+                                <input type="checkbox" class="form-check-input" id="nasya" name="nasya">
+                                <label class="form-check-label" for="nasya">Nasya</label>
+                              </div>
+                              <!-- Qo'shimcha form elementlari bu yerga qo'shilishi mumkin -->
+                          </form>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Yopish</button>
+                          <button type="button" class="btn btn-primary" onclick="saveData()">Sotish</button>
+                      </div>
+                  </div>
+              </div>
+            </div>
+            <table class="table" id="productTable">
+              <thead>
+                  <tr>
+                    
+                      <th scope="col">Tavar</th>
+                      <th scope="col">Soni</th>
+                      <th scope="col">Narh</th>
+                      <th scope="col">
+                          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#sellModal">Sotish</button>
+                      </th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                  
+                      <td>
+                          <select class="form-control">
+                            {% for i in product %}
+                              <option value="{{i.id}}">{{i.count}} {{i.product.name}}</option>
+                            {% endfor %}
+                          </select>
+                      </td>
+                      <td><input class="form-control" type="number" placeholder="soni"></td>
+                      <td><input class="form-control" type="number" step="any" placeholder="narhi"></td>
+                      <td><button class="btn btn-success" onclick="addRow()">+</button></td>
+                  </tr>
+              </tbody>
+          </table>
+
+                               
+               
+                   
+
+        </div>
+    </div>
+</div>
+
+
+
+<section class="section">
+  <div class="row">
+      <div class="col-12 col-md-12">
+              <div class="card-body">
+     
+                  <div class="accordion" id="accordionExample">
+        {% for i in page_obj %}
+
+
+
+
+
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne{{i.id}}">
+       
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne{{i.id}}" aria-expanded="true" aria-controls="collapseOne{{i.id}}">
+                <span style="margin-right: 16px;">  {{ i.date|date:"d-m-Y" }}</span> <span style="margin-right: 16px;">{{ i.client }}</span><span style="margin-right: 16px;">{{ i.total_summa }} </span>
+            </button>
+          </h2>
+          <div id="collapseOne{{i.id}}" class="accordion-collapse collapse" aria-labelledby="headingOne{{i.id}}" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Nomi</th>
+                  <th>Soni</th>
+                  <th>Narhi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for j in i.items.all %}
+                <div class="modal fade text-left" id="inlineForm{{j.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="myModalLabel33"> Boshqaru</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form  action="/order-item-edit/" method="post" >
+                                {% csrf_token %}
+                            <div class="modal-body">
+                                <div class="form-group mb-1">
+                                    <label for="amount" class="form-label">Som </label>
+                                    <input  step="any" name="price" required  value="{{j.price}}" class="form-control" >
+                                </div>  
+                                    <div class="form-group mb-1">
+                                    <label for="amount" class="form-label">Soni </label>
+                                    <input  step="any" name="count" required  value="{{j.count}}" class="form-control" >
+                                </div>
+        
+                                <div style="display: none !important;">
+                                    <input type="number" name="id" value="{{j.id}}" >
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                                        <span> Close</span>
+                                    </button>
+                                    <button type="submit" class="btn btn-primary ms-1" id="payment_create">
+                                        
+                                        <span>  Save</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                </div>
+                <tr>
+                  <td><a href="#"  data-bs-toggle="modal" data-bs-target="#inlineForm{{j.id}}" >{{j.product.product.name}}</a></td>
+                  <td>{{j.count}}</td>
+                  <td>{{j.price }} </td>
+                </tr>
+                <br>
+                <tr>
+                    <td>Jami</td>
+                    <td>{{j.total_price}} </td>
+                </tr>
+                <br>
+                {% if i.client %}
+                <tr>
+                  <td>{{i.loan_type}}</td>
+                  <td>{{i.cource}}</td>
+                  <td> <span style="margin-right: 20px;">  </span> <span style="margin-right: 20px;">{{i.client_before}}  </span> <span style="margin-right: 20px;"> </span><span style="margin-right: 20px;">{{i.client_after}} </span></td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+              </tbody>
+            </table>
+            </div>
+          </div>
+          </div>
+          <br>
+    
+
+          {% endfor  %}
+      </div>
+              </div>
+         
+      </div>
+  </div>
+</section>
+{% if page_obj.paginator.num_pages > 1 %}
+    <nav aria-label="Page navigation example">
+        <ul class="pagination pagination-primary justify-content-end">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1" aria-label="First">
+                        <span aria-hidden="true"><i class="bi bi-chevron-double-left"></i></span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="First">
+                        <span aria-hidden="true"><i class="bi bi-chevron-double-left"></i></span>
+                    </a>
+                </li>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
+                    </a>
+                </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <li class="page-item active">
+                        <a class="page-link" href="#">{{ num }}</a>
+                    </li>
+                {% elif num > page_obj.number|add:-3 and num < page_obj.number|add:3 %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                        <span aria-hidden="true"><i class="bi bi-chevron-double-right"></i></span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
+                    </a>
+                </li>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Last">
+                        <span aria-hidden="true"><i class="bi bi-chevron-double-right"></i></span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endif %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+document.getElementById('client').addEventListener('change', function() {
+        var nasyaCheckbox = document.getElementById('nasya');
+        if (this.value === "0") {
+            nasyaCheckbox.checked = false;
+            nasyaCheckbox.disabled = true;
+        } else {
+            nasyaCheckbox.disabled = false;
+        }
+    });
+
+  // Yangi qator qo'shish funksiyasi
+  function addRow() {
+      var table = document.getElementById("productTable").getElementsByTagName('tbody')[0];
+      var newRow = table.insertRow();
+
+      var cell1 = newRow.insertCell(0);
+      var cell2 = newRow.insertCell(1);
+      var cell3 = newRow.insertCell(2);
+      var cell4 = newRow.insertCell(3);
+
+      cell1.innerHTML = `<select class="form-control">
+                            {% for i in product %}
+                          <option value="{{i.id}}">{{i.count}} {{i.product.name}}</option>
+                          {% endfor %}
+                         
+                      </select>`;
+      cell2.innerHTML = '<input class="form-control" type="number" placeholder="soni">';
+      cell3.innerHTML = '<input class="form-control" type="number" step="any" placeholder="narhi">';
+      cell4.innerHTML = '<button class="btn btn-success" onclick="addRow()">+</button>';
+  }
+
+  // Ma'lumotlarni saqlash funksiyasi
+  function saveData() {
+      var client = document.getElementById("client").value;
+      // Ma'lumotlarni olish va saqlash uchun serverga yuborish lozim
+      console.log("Client: " + client);
+      // Ma'lumotlarni saqlash jarayoni
+      alert("Ma'lumotlar saqlandi");
+      $('#sellModal').modal('hide'); // Modaldan chiqish
+  }
+
+
+  function saveData() {
+        var client = document.getElementById("client").value;
+        var nasyaCheckbox = document.getElementById("nasya");
+
+// Checkbox holatini olish
+        var isNasyaChecked = nasyaCheckbox.checked; // true yoki false
+
+        
+        var products = [];
+
+        // Barcha jadval satrlarini olamiz
+        $('#productTable tbody tr').each(function() {
+            var row = $(this);
+            var product = row.find('select').val();
+            var count = row.find('input[type="number"]').eq(0).val();
+            var price = row.find('input[type="number"]').eq(1).val();
+
+            products.push({
+                product: product,
+                count: count,
+                price: price
+            });
+        });
+
+        // AJAX so'rovi
+        $.ajax({
+            url: '{% url "main:save_data" %}',  // O'zingizning URLingizni qo'ying
+            type: 'POST',
+            data: {
+                'client': client,
+                'isNasyaChecked':isNasyaChecked,
+                'products': JSON.stringify(products),
+                'csrfmiddlewaretoken': '{{ csrf_token }}'  // CSRF token qo'shish
+            },
+            success: function(response) {
+
+            $('#productTable tbody tr').each(function() {
+                var row = $(this);
+                row.find('select').val(''); // Select bo'shatish
+                row.find('input[type="number"]').val(''); // Input maydonlarni bo'shatish
+            });
+
+            $('#client').val('');
+            $('#sellModal').modal('hide'); // Modalni yopish
+
+        },
+        error: function(xhr, status, error) {
+            alert('Xatolik yuz berdi: ' + error);
+        }
+        });
+    }
+</script>
+
+
+{% endblock content %}

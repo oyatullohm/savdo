@@ -1,0 +1,73 @@
+{% extends 'wrapper.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col " >
+            <div class="row">
+                <div class="col">
+                    <nav class="navbar bg-body-tertiary">
+                       
+                        <button type="button"  class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                         Tovar Qoshish
+                        </button>
+                      
+                    </nav><!-- Button trigger modal -->
+
+
+
+                </div>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Tavar</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <form action="" method="post" >
+                    {% csrf_token %}
+                    <input type="text" class="form-control" placeholder="name" required name="name"  aria-label="" aria-describedby="basic-addon1">
+                    <br>
+                    <input type="number"   class="form-control" placeholder="count" required name="soni"  aria-label="" aria-describedby="basic-addon1">
+                    <br>
+                    
+                    <input type="number" step="any" class="form-control" placeholder="narhi" required name="narhi"  aria-label="" aria-describedby="basic-addon1">
+                    
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">ok</button>
+                      </div>
+                    </form>
+                </div>
+              </div>
+            </div>
+            <!-- Modal -->
+
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Narhi</th>
+                    <th scope="col">Qoldiq</th>
+                    <th scope="col">Summa</th>
+                   
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                   {% for i in product %}
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td> {{i.product.name }}</a></td>
+                    <td>{{i.sum}}</td>
+                    <td> {{i.count}}</td>
+                    <td> {{i.total_summa}}</td>
+                    
+                    </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}

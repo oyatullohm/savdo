@@ -1,0 +1,183 @@
+{% extends 'wrapper.html' %}
+{% block content %}
+
+<div class="page-heading">
+    <h3>Statistica</h3>
+</div> 
+
+<div class="page-content"> 
+    <section class="row">
+        <div class="col-12 col-lg-12">
+            <div class="row">
+                <div class="col-12 col-lg-3">
+                    <div class="card">
+                        <div class="card-body px-4 py-4-5">
+                            <div class="row">
+                                <div class="col-3 col-lg-12 d-flex justify-content-start">
+                                    <div class="stats-icon purple mb-2">
+                                        <i class="iconly-boldShow"></i>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <h6 class="text-muted font-semibold">Tavar</h6>
+                                    <h6 class="font-extrabold mb-0">{{product}}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-3">
+                    <div class="card">
+                        <div class="card-body px-4 py-4-5">
+                            <div class="row">
+                                <div class="col-3 col-lg-12 d-flex justify-content-start">
+                                    <div class="stats-icon blue mb-2">
+                                        <i class="iconly-boldProfile"></i>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <h6 class="text-muted font-semibold">Taminotchi</h6>
+                                    <h6 class="font-extrabold mb-0">{{tamnotchi}}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Children -->
+                <div class="col-12 col-lg-3">
+                    <div class="card">
+                        <div class="card-body px-4 py-4-5">
+                            <div class="row">
+                                <div class="col-3 col-lg-12 d-flex justify-content-start">
+                                    <div class="stats-icon green mb-2">
+                                        <i class="iconly-boldAdd-User"></i>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <h6 class="text-muted font-semibold">Client</h6>
+                                    <h6 class="font-extrabold mb-0">{{client}}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Groups -->
+                <div class="col-12 col-lg-3">
+                    <div class="card">
+                        <div class="card-body px-4 py-4-5">
+                            <div class="row">
+                                <div class="col-3 col-lg-12 d-flex justify-content-start">
+                                    <div class="stats-icon red mb-2">
+                                        <i class="iconly-boldBookmark"></i>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <h6 class="text-muted font-semibold">Jami</h6>
+                                    <h6 class="font-extrabold mb-0">{{total}}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>     
+                
+            </div>
+
+            <!-- Tolovlar Chart -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Tolovlar</h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="chart-profile-visit-payment"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Yangi Tolovlar Chart -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Savdo</h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="chart-profile-visit-payment-new"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+<script>
+    var apexSeries = {{ apex_series|safe }};
+    var last12Months = {{ last_12_months|safe }};
+    
+    var optionsProfileVisit = {
+        annotations: {
+            position: "back",
+        },
+        dataLabels: {
+            enabled: false,
+        },
+        chart: {
+            type: "bar",
+            height: 300,
+        },
+        fill: {
+            opacity: 1,
+        },
+        series: apexSeries,
+        xaxis: {
+            categories: last12Months,
+        },
+    };
+
+    var chartProfileVisit = new ApexCharts(
+        document.querySelector("#chart-profile-visit-payment"),
+        optionsProfileVisit
+    );
+
+    chartProfileVisit.render();
+
+    // Yangi Tolovlar uchun yangi chart
+    var newApexSeries = {{ new_apex_series|safe }};
+    var newLast12Months = {{ last_12_months|safe }};
+
+    var optionsProfileVisitNew = {
+        annotations: {
+            position: "back",
+        },
+        dataLabels: {
+            enabled: false,
+        },
+        chart: {
+            type: "bar",
+            height: 300,
+        },
+        fill: {
+            opacity: 1,
+        },
+        series: newApexSeries,
+        xaxis: {
+            categories: newLast12Months,
+        },
+    };
+
+    var chartProfileVisitNew = new ApexCharts(
+        document.querySelector("#chart-profile-visit-payment-new"),
+        optionsProfileVisitNew
+    );
+
+    chartProfileVisitNew.render();
+</script>
+
+{% endblock content %}

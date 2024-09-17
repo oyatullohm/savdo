@@ -1,0 +1,96 @@
+{% extends 'wrapper.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col " ><!-- Button trigger modal -->
+            <div class="row">
+                <div class="col">
+                    <nav class="navbar bg-body-tertiary">
+                       
+                        <button type="button"  class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                          Client Qo'shish
+                        </button>
+                      
+                    </nav><!-- Button trigger modal -->
+
+
+
+                </div>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Client</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <form action="" method="post" >
+                    {% csrf_token %}
+                    <input type="text" class="form-control" placeholder="Ism" required name="name"  aria-label="" aria-describedby="basic-addon1">
+                    <br>
+                    <input type="text"   class="form-control" placeholder="Tell" required name="phone"  aria-label="" aria-describedby="basic-addon1">
+                    <br>
+                    <select name="type" id=""  class="form-select" aria-label="Default select example" >
+                      
+                      <option value="2">Haridor </option>
+                      <option value="1">Taminotchi</option>
+                    </select>
+                    <br>
+                    <input type="number" step=0.01 class="form-control" placeholder="summa" required name="sum"  aria-label="" aria-describedby="basic-addon1">
+                    <br>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">ok</button>
+                      </div>
+                    </form>
+                </div>
+              </div>
+            </div>
+
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Ism</th>
+                    <th scope="col">Tell</th>
+                    <th scope="col">Qarzi</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    {% for i in client %}
+
+                      <div class="modal fade" id="exampleModal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel{{i.id}}" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="exampleModalLabel">{{i.name}}</h1>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form action="" method="post"> 
+                              {% csrf_token%}
+
+                              <input type="text" class="form-control" value="{{i.color}}"  placeholder="Ritsep nomi" required name="rang"  aria-label="" aria-describedby="basic-addon1">
+                              <input type="number" step=0.01  class="form-control" value="{{i.kl}}" placeholder="Kl" required name="kl"  aria-label="" aria-describedby="basic-addon1">
+                              <input type="number" step=0.01 class="form-control" value="{{i.sum}}" placeholder="summa" required name="sum"  aria-label="" aria-describedby="basic-addon1">
+                              <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Saqlash</button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    <th scpeo="row">{{ forloop.counter }}</th>
+                    <td> {{i.name }}</td>
+                    <td>  {{i.phone}}</td>
+                    <td> {{i.amount }}sum</td>
+    
+                    </tr>
+                    {% endfor %}
+                     </tbody>
+              </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}

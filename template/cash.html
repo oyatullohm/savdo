@@ -1,0 +1,119 @@
+{% extends 'wrapper.html' %}
+{% block content %}
+
+<div class="container">
+    <div class="container mt-4">
+        
+        <form method="get" action="" class="row g-3">
+            <div class="col-auto">
+                <label for="month">Oy</label>
+                <select id="month" name="month" class="form-control">
+                    {% for m in  number_list %}
+                    <option value="{{ m }}" {% if m == selected_month %}selected{% endif %}>{{ m }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-auto">
+                <label for="year">Yil</label>
+                <input type="number" id="year" name="year" class="form-control" value="{{ selected_year }}">
+            </div>
+            <div class="">
+                <button type="submit" class="btn btn-primary">Filtirlang</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="row mt-4">
+   
+
+        <div class="modal fade text-left" id="inlineForm{{cash.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel33"> Boshqaru</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="post">
+                        {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="form-group mb-1">
+                            <label for="amount" class="form-label">Som </label>
+                            <input  step="any" name="amount" required  value="{{cash.amount}}" class="form-control" >
+                        </div>
+
+                        <div style="display: none !important;">
+                            <input type="number" name="id" value="{{cash.id}}" >
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                                <span> Close</span>
+                            </button>
+                            <button type="submit" class="btn btn-primary ms-1" id="payment_create">
+                                
+                                <span>  Save</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+            <div class="card">
+               
+               
+                <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#inlineForm{{cash.id}}"   >Boshqaru</button>
+            
+                <div class="card-header">
+                    <h4>  {{cash.amount}} Som</h4>
+                    
+                </div>
+                <div class="card-body">
+                    <div id="chart-visitors-profile-{{ cash.id }}"></div>
+                </div>
+
+            </div>
+        </div>       
+      
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+
+        let optionsVisitorsProfile{{ cash.id }} = {
+            series: [ {{payment_cost}} , {{payment}} ,  {{payment_}}], 
+            labels: ["Berdim", "Oldim","ishlatdim" ],
+            // colors: ["#435ebe", "#55c6e8", "#010101"],
+            chart: {
+                type: "donut",
+                width: "100%",
+                height: "350px",
+            },
+            legend: {
+                position: "bottom",
+            },
+            plotOptions: {
+                pie: {
+                    donut: {
+                        size: "45%",
+                    },
+                },
+            },
+        };
+
+        var chartVisitorsProfile{{ cash.id }} = new ApexCharts(
+            document.querySelector("#chart-visitors-profile-{{ cash.id }}"),
+            optionsVisitorsProfile{{ cash.id }}
+        );
+
+        chartVisitorsProfile{{ cash.id }}.render();
+       
+    });
+</script>
+
+{% endblock content %}

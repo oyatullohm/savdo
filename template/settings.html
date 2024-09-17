@@ -1,0 +1,49 @@
+{% extends 'wrapper.html' %}
+{% block content %}
+<nav class="navbar bg-body-tertiary">
+                       
+    <button type="button"  class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    Yangilash 
+    </button>
+  
+</nav>
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Cource</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form method="post" >
+          {% csrf_token %}
+          <input type="number" class="form-control" placeholder="Cource" required name="cource"  value="{{cource.cource}}" aria-label="" aria-describedby="basic-addon1">
+          <input style="display: none !important;" type="number" class="form-control"  value="{{cource.id}}" name="id"  aria-label="" aria-describedby="basic-addon1">
+          <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">ok</button>
+            </div>
+          </form>
+      </div>
+    </div>
+  </div>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Sana</th>
+                        <th>Cource</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{cource.date|date:"d-m-Y"}}</td>
+                        <td>{{cource.cource}}</td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}
