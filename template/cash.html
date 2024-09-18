@@ -29,10 +29,12 @@
         <div class="modal fade text-left" id="inlineForm{{cash.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
                 <div class="modal-content">
+                    {% if request.user.is_staff %}
                     <div class="modal-header">
                         <h4 class="modal-title" id="myModalLabel33"> Boshqaru</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+                    {% endif %}
                     <form method="post">
                         {% csrf_token %}
                     <div class="modal-body">
