@@ -62,6 +62,7 @@ class Payment(models.Model):
     cash_after_amount = models.FloatField(default=0)
     date = models.DateField()
     amount = models.FloatField(default=0)
+    comment = models.CharField(max_length=255,null=True,blank=True)
     def __str__(self) :
         return f"{self.amount}"
 

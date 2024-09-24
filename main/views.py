@@ -229,6 +229,7 @@ class PaymentViev(LoginRequiredMixin,View):
         client_id = int(request.POST.get('client'))
         amount = request.POST.get('amount')
         
+        comment = request.GET.get('comment')
         type = request.GET.get('type')
 
         type_ = request.POST.get('type')
@@ -243,6 +244,7 @@ class PaymentViev(LoginRequiredMixin,View):
             date = timezone.now().date(),
             cource = Cource.objects.last().cource,
             cash_before_amount = cash.amount,
+            comment=comment
         )
 
 
