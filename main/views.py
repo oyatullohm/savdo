@@ -222,7 +222,7 @@ class PaymentViev(LoginRequiredMixin,View):
             'page_obj': paginated,
             'client':client,
         }
-        
+
         return render(request, 'payment.html', context)
         
     def post(self, request):
